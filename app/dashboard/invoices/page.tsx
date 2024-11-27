@@ -20,8 +20,8 @@ export default async function Page({
     page?: string;
   };
 }) {
-  const query = searchParams?.query || "";
-  const currentPage = Number(searchParams?.page) || 1;
+  const query = (await searchParams?.query) || "";
+  const currentPage = Number(await searchParams?.page) || 1;
   const totalPages = await fetchInvoicesPages(query);
 
   return (

@@ -14,7 +14,7 @@ export default async function Page({
     page?: string;
   };
 }) {
-  const query = searchParams?.query || "";
+  const query = (await searchParams?.query) || "";
 
   const customers = await fetchFilteredCustomers(query);
 

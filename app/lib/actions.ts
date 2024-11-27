@@ -1,10 +1,11 @@
 "use server";
 import { z } from "zod";
 import { sql } from "@vercel/postgres";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { signIn } from "@/auth";
 import { AuthError } from "next-auth";
+import { QUERY_TAGS } from "../constants";
 
 export type State = {
   errors?: {
@@ -59,6 +60,8 @@ export async function createInvoice(prevState: State, formData: FormData) {
   }
 
   revalidatePath("/dashboard/invoices");
+  revalidateTag(QUERY_TAGS.LATEST_INVOICES);
+  revalidateTag(QUERY_TAGS.CARD_DATA);
   redirect("/dashboard/invoices");
 }
 
@@ -94,6 +97,8 @@ export async function updateInvoice(
   }
 
   revalidatePath("/dashboard/invoices");
+  revalidateTag(QUERY_TAGS.LATEST_INVOICES);
+  revalidateTag(QUERY_TAGS.CARD_DATA);
   redirect("/dashboard/invoices");
 }
 
@@ -101,6 +106,8 @@ export async function deleteInvoice(id: string) {
   try {
     await sql`DELETE FROM invoices WHERE id = ${id}`;
     revalidatePath("/dashboard/invoices");
+    revalidateTag(QUERY_TAGS.LATEST_INVOICES);
+    revalidateTag(QUERY_TAGS.CARD_DATA);
     return { message: "Deleted Invoice." };
   } catch {
     return { message: "Database Error: Failed to Delete Invoice." };

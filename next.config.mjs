@@ -2,7 +2,8 @@
 
 const nextConfig = {
   experimental: {
-    ppr: "incremental",
+    // Wait for nextjs version 15.0.4
+    // dynamicIO: true,
   },
 };
 
